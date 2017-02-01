@@ -1,0 +1,36 @@
+#cloud-config
+manage-resolv-conf: true
+resolv_conf:
+  nameservers: ['192.168.2.10']
+  searchdomains:
+    - cloud.simagix.com
+  domain: cloud.simagix.com
+  options:
+    rotate: true
+    timeout: 1
+
+groups:
+  - simagix
+users:
+  - name: simagix
+    primary-group: simagix
+    lock_passwd: false
+    passwd: $1$VudwpjCF$rG5hdtWuHkTCwTMlHdYip1
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    ssh_pwauth: True
+    ssh-authorized-keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCaCoTcmhbGPvjx6oXtPgKV/3WGWNmfmyZ5ZHJvx8P61Lub/qUnHm614jHtZmHe4y97YggrlLHA9PW9ImFX+WsYr8/VflVLLoe2hLURmPA5HMFPk2ObE0I7TAvqH7fPF2iWKZgKZLyKhk1LKFGqLODTUwg2XCCmt7vz9ghBU2bS7yX+8TVfN5Vmg+Po9Al9lEOFjYLyw6INqhIb9N8zE8GhwfCX1zqvX+653Yi1Fs119leIUfml3JpjCkOv0gwGFdUG2i58BYp+Tk5mB3b6QZvsOc0SLP5uLn98eyv8UZI4GjcBBLBeIh69JNTNItYWdcad8vByFiRNz06UHDpz+A2x kuei-chun.chen@ericsson.com
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCtxV+Mj68Ikw/Miwra3jHO6GEGPlQU1yd3mUuCqp+udu+BJU2Y1ZAc9hWGaJytQ+c+8ZI5gELez1HdXFRQDj/74ugNrCUxKcB2rLTm0hhZxaJq07JBc+YtH8iIoEl044b0rxdGhl2TeKxTkovEdxk7u0b0O/P1Uqo3VthTa6reIDRlodISAN57bgM14i/KfDGh7b17RZ/2VZuRWFt+ObWHU6RV/2LRy5sXHPjBQY7CYtZw+M1XPRCnx/3AYAAbBouZVgVnlovtatpWGWaL9Y9T4uuHMZs/z8ASAd5vCxFkanknS71MYkRavzC6YMFyPoq+/C9xpVm65kCFBEYpDZth
+  - name: simagix
+    primary-group: simagix
+  - name: mongodb
+    primary-group: mongodb
+runcmd:
+  - [sh, -x, /tmp/post_install.sh]
+
+yum_repos:
+  simagix:
+    name: Simagix yum repo
+    baseurl: baseurl=http://simagix.local:8080/simagix/
+    enabled: true
+    gpgcheck: false
